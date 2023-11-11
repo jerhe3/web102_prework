@@ -191,6 +191,7 @@ secondGameContainer.append(runnerUp);
 
 const searchInput = document.getElementById("search-input");
 
+// On keypress search for games that include the searchQuery
 searchInput.addEventListener("keyup", (event) => {
     deleteChildElements(gamesContainer);
 
