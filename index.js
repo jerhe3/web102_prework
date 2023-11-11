@@ -40,12 +40,12 @@ function addGamesToPage(games) {
         // about each game
         // TIP: if your images are not displaying, make sure there is space
         // between the end of the src attribute and the end of the tag ("/>")
-        let info =
+        div.innerHTML =
             `
-            <p>${item.name}</p> 
-            <img class='game-img' src='${item.img}' />
-            <p>Backers: ${item.backers}`;
-        div.innerHTML = info;
+                <p>${item.name}</p> 
+                <img class='game-img' src='${item.img}' />
+                <p>Backers: ${item.backers}
+            `;
 
         // append the game to the games-container
         document.getElementById('games-container').append(div);
@@ -67,16 +67,18 @@ addGamesToPage(GAMES_JSON);
 const contributionsCard = document.getElementById("num-contributions");
 
 // use reduce() to count the number of total contributions by summing the backers
-
+let totalContributions = GAMES_JSON.reduce((total, item) => { return total + item.backers; }, 0);
 
 // set the inner HTML using a template literal and toLocaleString to get a number with commas
-
+contributionsCard.innerHTML = `${totalContributions.toLocaleString()}`;
 
 // grab the amount raised card, then use reduce() to find the total amount raised
 const raisedCard = document.getElementById("total-raised");
 
-// set inner HTML using template literal
+let totalRaised = GAMES_JSON.reduce((total, item) => { return total + item.pledged; }, 0);
 
+// set inner HTML using template literal
+raisedCard.innerHTML = `$${totalRaised.toLocaleString()}`;
 
 // grab number of games card and set its inner HTML
 const gamesCard = document.getElementById("num-games");
