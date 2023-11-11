@@ -17,6 +17,8 @@ function deleteChildElements(parent) {
     }
 }
 
+let gamesToDisplay = GAMES_JSON;
+
 /*****************************************************************************
  * Challenge 3: Add data about each game as a card to the games-container
  * Skills used: DOM manipulation, for loops, template literals, functions
@@ -42,10 +44,12 @@ function addGamesToPage(games) {
         // between the end of the src attribute and the end of the tag ("/>")
         div.innerHTML =
             `
+                <p>${item.pledged > item.goal ? "Full Funded!" : `$${item.pledged.toLocaleString()} / $${item.goal.toLocaleString()}`}</p>
                 <img class='game-img' src='${item.img}' />
-                <p>${item.name}</p> 
-                <p>${item.description}</p>
+                <p class="game-card-name">${item.name}</p> 
+                <p class="game-card-description">${item.description}</p>
                 <p>Backers: ${item.backers}
+                
             `;
 
         // append the game to the games-container
@@ -55,7 +59,7 @@ function addGamesToPage(games) {
 
 // call the function we just defined using the correct variable
 // later, we'll call this function using a different list of games
-addGamesToPage((GAMES_JSON));
+addGamesToPage(gamesToDisplay);
 
 // Code: 
 /*************************************************************************************
@@ -99,7 +103,7 @@ function filterUnfundedOnly() {
     deleteChildElements(gamesContainer);
 
     // use filter() to get a list of games that have not yet met their goal
-    let unreachedGoal = GAMES_JSON.filter((game) => { return game.goal > game.pledged; });
+    let unreachedGoal = gamesToDisplay.filter((game) => { return game.goal > game.pledged; });
 
     // use the function we previously created to add the unfunded games to the DOM
     addGamesToPage(unreachedGoal);
@@ -110,7 +114,7 @@ function filterFundedOnly() {
     deleteChildElements(gamesContainer);
 
     // use filter() to get a list of games that have met or exceeded their goal
-    let funded = GAMES_JSON.filter((game) => { return game.pledged > game.goal; });
+    let funded = gamesToDisplay.filter((game) => { return game.pledged > game.goal; });
 
     // use the function we previously created to add unfunded games to the DOM
     addGamesToPage(funded);
@@ -121,7 +125,7 @@ function showAllGames() {
     deleteChildElements(gamesContainer);
 
     // add all games from the JSON data to the DOM
-    addGamesToPage(GAMES_JSON);
+    addGamesToPage(gamesToDisplay);
 }
 
 // select each button in the "Our Games" section
@@ -134,7 +138,7 @@ unfundedBtn.addEventListener("click", filterUnfundedOnly);
 fundedBtn.addEventListener("click", filterFundedOnly);
 allBtn.addEventListener("click", showAllGames);
 
-
+// tolocaleString<div>1ivy
 /*************************************************************************************
  * Challenge 6: Add more information at the top of the page about the company.
  * Skills used: template literals, ternary operator
@@ -178,9 +182,28 @@ let [first, second, ...others] = GAMES_JSON;
 // create a new element to hold the name of the top pledge game, then append it to the correct element
 let topPledge = document.createElement('p');
 topPledge.innerHTML = `${first.name}`;
-document.getElementById('first-game').append(topPledge);
+firstGameContainer.append(topPledge);
 
 // do the same for the runner up item
 let runnerUp = document.createElement('p');
 runnerUp.innerHTML = `${second.name}`;
-document.getElementById('second-game').append(runnerUp);
+secondGameContainer.append(runnerUp);
+
+const searchInput = document.getElementById("search-input");
+
+searchInput.addEventListener("keyup", (event) => {
+    deleteChildElements(gamesContainer);
+
+    const { value } = event.target;
+    const search = value.toLowerCase();
+    console.log(search);
+
+    if (search == '')
+        gamesToDisplay = GAMES_JSON;
+    else
+        gamesToDisplay = GAMES_JSON.filter((item) => {
+            return item.name.toLowerCase().includes(search);
+        });
+
+    addGamesToPage(gamesToDisplay);
+});
