@@ -83,6 +83,10 @@ raisedCard.innerHTML = `$${totalRaised.toLocaleString()}`;
 // grab number of games card and set its inner HTML
 const gamesCard = document.getElementById("num-games");
 
+let totalGames = GAMES_JSON.reduce((total, item) => { return total + 1 }, 0);
+
+gamesCard.innerHTML = `${totalGames}`;
+
 /*************************************************************************************
  * Challenge 5: Add functions to filter the funded and unfunded games
  * total number of contributions, amount donated, and number of games on the site.
